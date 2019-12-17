@@ -18,38 +18,26 @@ public class FixtureDifficultyCalculator {
     private List<Team> teamList;
 
     public FixtureDifficultyCalculator() throws IOException {
-        // Look up the team array only once
-        FantasyPLService fplService = new FantasyPLService();
-        JSONArray teamsArray = fplService.getTeamsArray();
-        Moshi moshi = new Moshi.Builder().build();
-        JsonAdapter<Team> teamsAdapter = moshi.adapter(Team.class);
-        teamList = new ArrayList<>();
-        for (int j = 0; j < teamsArray.length(); j++) {
-            teamList.add(teamsAdapter.fromJson(teamsArray.get(j).toString()));
-        }
+        teamList = getTeamList();
     }
 
-    public List<Footballer> getDifficultyTotal(List<Footballer> footballers, int gameWeek, int weeksToEvaluate) throws IOException {
-        for (int i = 0; i < weeksToEvaluate; i++) {
-            FantasyPLService fplService = new FantasyPLService();
-            JSONArray fixturesArray = fplService.getFixturesArray(gameWeek + i);
-            List<Fixture> fixtures = getFixturesFromArray(fixturesArray);
+    public void setDifficulty(Footballer footballer, int gameWeek) throws IOException {
+        FantasyPLService fplService = new FantasyPLService();
+        JSONArray fixturesArray = fplService.getFixturesArray(gameWeek);
+        List<Fixture> fixtures = getFixturesFromArray(fixturesArray);
 
-            for (Footballer footballer : footballers) {
-                for (Fixture fixture : fixtures) {
-                    int teamId = footballer.getTeamId();
-                    if (teamId == fixture.team_a) {
-                        setOppositionNameAndDifficulty(footballer, fixture, false);
-                        break;
-                    } else if (teamId == fixture.team_h) {
-                        setOppositionNameAndDifficulty(footballer, fixture, true);
-                        break;
-                    }
-                }
+        for (Fixture fixture : fixtures) {
+            int teamId = footballer.getTeamId();
+            if (teamId == fixture.team_a) {
+                setOppositionNameAndDifficulty(footballer, fixture, false);
+                break;
+            } else if (teamId == fixture.team_h) {
+                setOppositionNameAndDifficulty(footballer, fixture, true);
+                break;
             }
         }
-        return footballers;
     }
+
 
     private void setOppositionNameAndDifficulty(Footballer footballer, Fixture fixture, boolean isFootballerAtHome) {
         int awayTeam = fixture.team_a;
@@ -94,4 +82,19 @@ public class FixtureDifficultyCalculator {
         }
         return fixtures;
     }
+
+    private List<Team> getTeamList() throws IOException {
+        // Look up the team array only once
+        FantasyPLService fplService = new FantasyPLService();
+        JSONArray teamsArray = fplService.getTeamsArray();
+        Moshi moshi = new Moshi.Builder().build();
+        JsonAdapter<Team> teamsAdapter = moshi.adapter(Team.class);
+        List<Team> teamList = new ArrayList<>();
+        for (int j = 0; j < teamsArray.length(); j++) {
+            teamList.add(teamsAdapter.fromJson(teamsArray.get(j).toString()));
+        }
+        return teamList;
+    }
+
+
 }
