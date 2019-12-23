@@ -12,22 +12,27 @@ public class Run {
     private static final int WEEKS_TO_EVALUATE = 5;
 
     public static void main(String[] args) throws IOException {
-        GameWeek gameWeek = new GameWeek();
-        int week = gameWeek.getCurrent();
-
+        int gameWeek = new GameWeek().getCurrent();
         Squad squad = new Squad();
-        List<Footballer> footballers = squad.get(week - 1);
+        List<Footballer> footballers = squad.get(gameWeek - 1);
 
         FixtureDifficultyCalculator calculator = new FixtureDifficultyCalculator();
-        footballers = calculator.getDifficultyTotal(footballers, week, WEEKS_TO_EVALUATE);
+        int i = 0;
+        while (i < WEEKS_TO_EVALUATE) {
+            for (Footballer footballer : footballers) {
+                calculator.setDifficulty(footballer, gameWeek + i);
+            }
+            i++;
+        }
+        //footballers = calculator.getDifficultyTotal(footballers, gameWeek, WEEKS_TO_EVALUATE);
 
         Collections.sort(footballers);
         Collections.reverse(footballers);
 
         for (Footballer footballer : footballers) {
             System.out.println("Player: " + footballer.getWebName()
-                            + "| Opponent: " + footballer.getOpponentList().toString()
-                            + "| Total: " + footballer.getDifficultyTotal());
+                    + "| Opponent: " + footballer.getOpponentList().toString()
+                    + "| Total: " + footballer.getDifficultyTotal());
         }
     }
 }
