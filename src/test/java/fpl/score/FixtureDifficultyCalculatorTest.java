@@ -17,7 +17,7 @@ public class FixtureDifficultyCalculatorTest {
 
         // When
         FixtureDifficultyCalculator calculator = new FixtureDifficultyCalculator();
-        calculator.setDifficulty(liverpoolPlayer, 1);
+        calculator.getDifficulty(liverpoolPlayer, 1);
 
         // Then
         int expectedDifficultyForLiverpoolWeek1 = 2;

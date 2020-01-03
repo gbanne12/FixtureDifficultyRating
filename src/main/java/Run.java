@@ -20,11 +20,10 @@ public class Run {
         int i = 0;
         while (i < WEEKS_TO_EVALUATE) {
             for (Footballer footballer : footballers) {
-                calculator.setDifficulty(footballer, gameWeek + i);
+                calculator.getDifficulty(footballer, gameWeek + i);
             }
             i++;
         }
-        //footballers = calculator.getDifficultyTotal(footballers, gameWeek, WEEKS_TO_EVALUATE);
 
         Collections.sort(footballers);
         Collections.reverse(footballers);

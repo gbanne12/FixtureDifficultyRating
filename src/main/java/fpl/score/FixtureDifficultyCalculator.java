@@ -21,7 +21,7 @@ public class FixtureDifficultyCalculator {
         teamList = getTeamList();
     }
 
-    public void setDifficulty(Footballer footballer, int gameWeek) throws IOException {
+    public Footballer getDifficulty(Footballer footballer, int gameWeek) throws IOException {
         FantasyPLService fplService = new FantasyPLService();
         JSONArray fixturesArray = fplService.getFixturesArray(gameWeek);
         List<Fixture> fixtures = getFixturesFromArray(fixturesArray);
@@ -36,6 +36,7 @@ public class FixtureDifficultyCalculator {
                 break;
             }
         }
+        return footballer;
     }
 
 

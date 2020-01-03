@@ -15,7 +15,7 @@ public class SquadTest {
     public void canGetSquadOf15() throws IOException {
         Squad squad = new Squad();
         List<Footballer> gameweekOneSquad = squad.get(1);
-        assertEquals("Full squad with subs should be 15 players", 15, gameweekOneSquad.size());
+        assertEquals("Full squad with subs should be 15 players", 15, gameweekOneSquad.stream().distinct().count());
         assertTrue(containsName(gameweekOneSquad, "Begovic"));
         assertTrue(containsName(gameweekOneSquad, "Digne"));
         assertTrue(containsName(gameweekOneSquad, "Alexander-Arnold"));
